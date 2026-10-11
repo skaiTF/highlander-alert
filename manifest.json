@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "highlander alert",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["https://tf2center.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    { "resources": ["alert.mp3"], "matches": ["https://tf2center.com/*"] }
+  ]
+}
