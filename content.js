@@ -1,6 +1,8 @@
 const sound = new Audio(chrome.runtime.getURL("alert.mp3"));
 sound.volume = 0.6;
 
+const ALERT_TYPES = ["highlander"];
+
 const seen = new Set();
 let primed = false; // don't ding for lobbies that are already listed on load
 
@@ -8,10 +10,12 @@ function scan(container) {
   const panels = container.querySelectorAll('.lobbyOverviewPanel[id^="lobbyOverview-"]');
   for (const panel of panels) {
     const type = panel.querySelector(".gameType")?.textContent.trim();
-    if (!/^\d+v\d+$/.test(type || "")) continue; // template not filled in yet
+    if (!type || type === "GAMETYPE") continue; // template not filled in yet
     if (seen.has(panel.id)) continue;
     seen.add(panel.id);
-    if (primed && type === "9v9") sound.play().catch(console.warn);
+    if (primed && ALERT_TYPES.includes(type.toLowerCase())) {
+      sound.play().catch(console.warn);
+    }
   }
 }
 
@@ -21,7 +25,7 @@ function start(container) {
 
   let pending = null;
   new MutationObserver(() => {
-    if (pending) return;               // throttle, but never starve
+    if (pending) return; // throttle, but never starve
     pending = setTimeout(() => {
       pending = null;
       scan(container);
