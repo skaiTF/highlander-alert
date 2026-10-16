@@ -1,4 +1,5 @@
 const DEFAULT_SETTINGS = { enabled: true, volume: 0.6, types: ["highlander"] };
+const SYNC_KEYS = ["enabled", "volume", "types"];
 
 let settings = { ...DEFAULT_SETTINGS };
 let customSound = null;
@@ -66,23 +67,29 @@ function start(container) {
 
 function loadSettings(callback) {
   chrome.storage.sync.get(DEFAULT_SETTINGS, (sync) => {
+    // Firefox refuses storage.sync for temporary add-ons that lack an add-on ID;
+    // fall back to local storage so the extension still works.
+    if (chrome.runtime.lastError) {
+      chrome.storage.local.get(DEFAULT_SETTINGS, (local) => finish(local));
+    } else {
+      finish(sync);
+    }
+  });
+  function finish(source) {
     chrome.storage.local.get({ customSound: null }, (local) => {
-      settings = { ...DEFAULT_SETTINGS, ...sync };
+      settings = { ...DEFAULT_SETTINGS, ...source };
       if (!Array.isArray(settings.types)) settings.types = [...DEFAULT_SETTINGS.types];
       customSound = local.customSound || null;
       if (callback) callback();
     });
-  });
+  }
 }
 
-chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === "sync") {
-    if (changes.enabled) settings.enabled = changes.enabled.newValue;
-    if (changes.volume) settings.volume = changes.volume.newValue;
-    if (changes.types) settings.types = changes.types.newValue || [];
-  } else if (area === "local" && changes.customSound) {
-    customSound = changes.customSound.newValue || null;
+chrome.storage.onChanged.addListener((changes) => {
+  for (const key of SYNC_KEYS) {
+    if (changes[key]) settings[key] = changes[key].newValue;
   }
+  if (changes.customSound) customSound = changes.customSound.newValue || null;
 });
 
 function boot() {

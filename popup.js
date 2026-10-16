@@ -68,11 +68,16 @@ function saveTypes() {
 function saveSync(partial) {
   settings = { ...settings, ...partial };
   chrome.storage.sync.set(partial, () => {
+    // Firefox refuses storage.sync for temporary add-ons that lack an add-on ID.
+    // Keep working by falling back to local storage.
     if (chrome.runtime.lastError) {
-      flashStatus("Could not save");
-    } else {
-      flashStatus("Saved");
+      chrome.storage.local.set(partial, () => {
+        flashStatus(chrome.runtime.lastError ? "Could not save" : "Saved");
+        renderEnabledNote();
+      });
+      return;
     }
+    flashStatus("Saved");
     renderEnabledNote();
   });
 }
@@ -189,13 +194,20 @@ function clearCustomSound() {
 function init() {
   buildTypeCheckboxes();
   chrome.storage.sync.get(DEFAULT_SETTINGS, (sync) => {
-    chrome.storage.local.get({ customSound: null, customSoundName: "" }, (local) => {
-      settings = { ...DEFAULT_SETTINGS, ...sync };
-      if (!Array.isArray(settings.types)) settings.types = [...DEFAULT_SETTINGS.types];
-      customSound = local.customSound || null;
-      settings.customSoundName = local.customSoundName || "";
-      render();
-    });
+    const finish = (source) => {
+      chrome.storage.local.get({ customSound: null, customSoundName: "" }, (local) => {
+        settings = { ...DEFAULT_SETTINGS, ...source };
+        if (!Array.isArray(settings.types)) settings.types = [...DEFAULT_SETTINGS.types];
+        customSound = local.customSound || null;
+        settings.customSoundName = local.customSoundName || "";
+        render();
+      });
+    };
+    if (chrome.runtime.lastError) {
+      chrome.storage.local.get(DEFAULT_SETTINGS, finish);
+    } else {
+      finish(sync);
+    }
   });
 }
 

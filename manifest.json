@@ -2,7 +2,21 @@
   "manifest_version": 3,
   "name": "highlander alert",
   "version": "1.1",
+  "description": "When a new TF2Center lobby of the chosen type is created, you will be notified.",
+  "icons": {
+    "128": "icon-128.png",
+    "48": "icon-48.png"
+  },
   "permissions": ["storage"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{77d2a642-dba2-4bc4-97a2-5d35499ec8f7}",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
   "action": {
     "default_popup": "popup.html",
     "default_title": "Highlander Alert settings"
