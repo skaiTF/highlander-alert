@@ -1,7 +1,7 @@
-# Highlander Alert for TF2Center
+# New Lobby Alerts for TF2Center
 
-I don't own a second monitor, and I am tired of alt-tabbing every 2 minutes to check if a HL lobby has been created so I made this.
-When a new highlander lobby is created you will be alerted by a bell sound.
+I don't own a second monitor, and I am tired of alt-tabbing every 2 minutes to check if a new lobby has been created so I made this.
+When a new lobby of the selected type is created you will be alerted by a bell sound.
 
 **THIS IS NOT AN AUTO-JOIN BROWSER EXTENSION**
 
