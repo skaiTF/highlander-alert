@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "highlander alert",
+  "name": "New Lobby Alerts for TF2Center",
   "version": "1.1",
   "description": "When a new TF2Center lobby of the chosen type is created, you will be notified.",
   "icons": {
