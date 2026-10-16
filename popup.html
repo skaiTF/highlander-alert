@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lobby Alert settings</title>
+    <link rel="stylesheet" href="fonts/nunito.css" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Enable New Lobby Alerts</h1>
+      <label class="switch" title="Enable or disable alerts">
+        <input type="checkbox" id="enabled" />
+        <span class="switch-track"><span class="switch-thumb"></span></span>
+      </label>
+    </header>
+
+    <p id="disabledNote" class="note" hidden>Alerts are paused.</p>
+
+    <section class="section">
+      <h2>Lobby types</h2>
+      <div id="types" class="types"></div>
+    </section>
+
+    <section class="section">
+      <h2>Alert sound</h2>
+      <div class="radio-row">
+        <label class="radio">
+          <input type="radio" name="soundSource" value="default" />
+          <span>Default bell</span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="soundSource" value="custom" />
+          <span>Custom</span>
+        </label>
+      </div>
+      <div class="upload-row">
+        <button type="button" id="chooseSound" class="btn btn-ghost">Choose file…</button>
+        <span id="soundName" class="hint">No custom sound</span>
+      </div>
+      <input type="file" id="soundFile" accept="audio/*" hidden />
+      <button type="button" id="resetSound" class="link" hidden>Reset to default</button>
+    </section>
+
+    <section class="section">
+      <h2>Volume <span id="volumeValue" class="hint">60%</span></h2>
+      <input type="range" id="volume" min="0" max="100" step="1" value="60" />
+      <button type="button" id="preview" class="btn">Preview sound</button>
+    </section>
+
+    <footer id="status" class="status" role="status" aria-live="polite"></footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

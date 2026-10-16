@@ -1,7 +1,12 @@
 {
   "manifest_version": 3,
   "name": "highlander alert",
-  "version": "1.0",
+  "version": "1.1",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Highlander Alert settings"
+  },
   "content_scripts": [
     {
       "matches": ["https://tf2center.com/*"],
